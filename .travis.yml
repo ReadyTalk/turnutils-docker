@@ -16,6 +16,8 @@ script:
 after_success:
 - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT
+- docker tag readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT readytalk/$IMAGE_NAME:latest
+- docker push readytalk/$IMAGE_NAME:latest
 notifications:
   slack:
     template:
