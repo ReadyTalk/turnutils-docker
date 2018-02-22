@@ -2,6 +2,12 @@
 
 # Docker turn tester
 
+## Requirements
+
+Docker
+
+## Usage
+
 This is intended to verify the functionality of a turn server.  Just run it like this:
 
 ```
