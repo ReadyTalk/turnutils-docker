@@ -1,0 +1,18 @@
+sudo: required
+dist: trusty
+language: python
+services:
+- docker
+env:
+  global:
+  - IMAGE_NAME=turnutils
+  - COMMIT=${TRAVIS_COMMIT::7}
+  - MAJ_VERSION="1.0"
+install: true
+script:
+- docker build -t readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT .
+- docker images
+after_success:
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker push readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT
+
