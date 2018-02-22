@@ -1,23 +1,32 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    echo "You need to specify an endpoint"
-    echo "Valid usage: ./test.sh turn.domain.com"
-    exit 1   
+if [ -z "$1" -a ! -f '.config' ]; then
+    echo "You need to specify an endpoint or provide a .config list of servers"
+    exit 1
 fi
 
-host=$1
+test() {
+    docker rm -f turntest &> /dev/null
+    docker run --name turntest -e TARGET=$host -itd readytalk/turnutils:latest &> /dev/null
+    exit_code=$(docker wait turntest)
 
-echo "Beginning test for turn functionality against $host:443"
+    if [[ "$exit_code" != 0 ]]; then
+        echo "ERROR: $host server does not work"
+    else
+        echo "SUCCESS: $host is working!"
+    fi
+}
 
-docker rm -f turntest &> /dev/null
-docker run --name turntest -e TARGET=$host -itd readytalk/turnutils:latest &> /dev/null
-exit_code=$(docker wait turntest)
 
-if [[ "$exit_code" != 0 ]]; then
-    echo "ERROR: This TURN server does not work"
+if [ -f '.config' -a -z "$1" ]; then
+    echo "Using config file to run tests"
+    while read endpoint; do
+        host=$endpoint
+        test
+    done <.config
 else
-    echo "SUCCESS! This TURN server is working!"
+    host=$1
+    test
 fi
-echo "Run 'docker logs turntest' to see the output from the test"
+
 exit $exit_code
