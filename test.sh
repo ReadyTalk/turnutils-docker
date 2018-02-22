@@ -8,8 +8,10 @@ fi
 
 host=$1
 
-docker rm -f turntest
-docker run --name turntest -e TARGET=$host -itd readytalk/turnutils:latest
+echo "Beginning test for turn functionality against $host:443"
+
+docker rm -f turntest &> /dev/null
+docker run --name turntest -e TARGET=$host -itd readytalk/turnutils:latest &> /dev/null
 exit_code=$(docker wait turntest)
 
 if [[ "$exit_code" != 0 ]]; then
