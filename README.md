@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ReadyTalk/turnutils-docker.svg?branch=master)](https://travis-ci.org/ReadyTalk/turnutils-docker)
+
 # Docker turn tester
 
 This is intended to verify the functionality of a turn server.  Just run it like this:
