@@ -19,5 +19,9 @@ Alternatively you can specify a `.config` file with a list of turn servers.  The
 ```
 ./test.sh
 ```
- 
-Right now it assumes port 443.  More revisions to come.  
+
+## Customization
+
+You can run different arguments for turnutils_uclient.  Just set ARGS in the test script.  
+
+You can also specify the timeout for the commands in test.sh.  Set TIMEOUT variable. 
