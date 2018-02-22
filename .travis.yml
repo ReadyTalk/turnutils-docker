@@ -10,9 +10,18 @@ env:
   - MAJ_VERSION="1.0"
 install: true
 script:
-- docker build -t readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT .
+- docker build -t readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT
+  .
 - docker images
 after_success:
 - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push readytalk/$IMAGE_NAME:$MAJ_VERSION.$TRAVIS_BUILD_NUMBER-$COMMIT
-
+notifications:
+  slack:
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch}> by %{author} %{result} in %{duration}"
+      - "Image Name: readytalk/kamailio-docker:3.2.%{build_number}-%{commit}"
+    on_success: always # default: always
+    on_failure: always # default: always
+    rooms:
+      secure: jLOOacIppjtb/boKpVWhEbCdpdVIInY2BXQoj5Topn5CMjH/Xc/gDnr3uvYXA+QYhzA80PpM3r5i8pcAzs0Ihy9+oGn6u4XcMst0bknp7GKsgMS1ybRz8zWupBwCLJ3II4IIluqzpUS8LOD9wRiVlXq0htu63tCgJ1Eb/ddSmvOJIwg7k/6NTRYc4vf7m1c0XitodqTXUNnbhT42G7QZxs9eZMAlpQOQP836c0nydhuuc9nfKkmX1p0k3byjyWdFRrIgSq8NfhhJA0JagUW/2GP5e6TRj2EVAlQuQquLxX7Q+AAs1pCEHZLuWmux1TC5u/4/hThfvbTA0gOOEHDLMdkSW4CU21NXgmVELpAsDg8qk33tFbrISDl0ZjGeMQp8SFxxwxpI2Gh31EShFwuD59fADzvn1cNv2gAe4qDxSDqRiaz0i31RSq1udhYelQB8HGMO/hjFn1b0eLefQ+ed6zGVVnS3m9EuNiDdklaWMrVEAxd0NHxb9aI8rCpx09KOtsij5SxI/yCxo0YF/wbOhrbcRrGxkjPuNMqDpVZDtrR48PXjKz3W999Lw1mcC4wD/OKSLomxu4MvSaRiiNpHJXNcVGV5vAk/lh8Ag524eM+HQB4DDoZ1jqBCrIkc9iE32rb2KOS4q4D96BXwbge13EkO0SbEMBJY9mMRjU+hg5Y=
